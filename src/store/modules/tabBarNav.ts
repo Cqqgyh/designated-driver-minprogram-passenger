@@ -19,6 +19,13 @@ export const useTabBarStore = defineStore({
       {
         index: 1,
         activeColor: getActiveColor(),
+        icon: 'tmicon-icon',
+        text: '优惠券',
+        pagePath: '/pages/coupon/coupon'
+      },
+      {
+        index: 2,
+        activeColor: getActiveColor(),
         icon: 'tmicon-userplus-fill',
         text: '个人中心',
         pagePath: '/pages/userCenter/userCenter'

@@ -12,14 +12,20 @@
       "style": {
         "navigationBarTitleText": "首页",
 //        "navigationStyle": "custom",
-        "titlePenetrate": "YES"
+//        "titlePenetrate": "YES"
+      }
+    },
+    {
+      "path": "pages/coupon/coupon",
+      "style": {
+        "navigationBarTitleText": "优惠券"
       }
     },
     {
       "path": "pages/userCenter/userCenter",
       "style": {
         "navigationBarTitleText": "个人中心",
-        "navigationBarBackgroundColor": "#E7F0FF"
+//        "navigationBarBackgroundColor": "#E7F0FF"
       }
     }
   ],
@@ -58,6 +64,10 @@
         "pagePath": "pages/index/index",
 //        "iconPath": "static/image/icon_component.png",
 //        "selectedIconPath": "static/image/icon_component_HL.png",
+        "text": ""
+      },
+      {
+        "pagePath": "pages/coupon/coupon",
         "text": ""
       },
       {
