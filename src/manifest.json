@@ -111,12 +111,18 @@
     /**
   * 挂到后台依然可以使用GPS定位
   */
+    "plugins": {
+      "chooseLocation": {
+        "version": "1.0.10",
+        "provider": "wx76a9a06e5b4e693e"
+      }
+    },
     "requiredBackgroundModes": [
       "location"
     ],
     "permission": {
       "scope.userLocation": {
-        "desc": "请允许地图服务使用GPS定位"
+        "desc": "你的位置信息将用于小程序定位"
       }
     },
     //        位置信息接口
