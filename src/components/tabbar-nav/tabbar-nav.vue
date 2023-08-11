@@ -35,5 +35,14 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useTabBarStore } from '@/store/modules/tabBarNav'
+import {getCurrentPageInfo} from "@/utils";
+const pageInfo = getCurrentPageInfo()
 const tabBarStore = useTabBarStore()
+onShow(() => {
+  // 找到当前路由
+  const routePathIndex = tabBarStore.tabBarNavList.find(item => item.pagePath === pageInfo.route)?.index
+  // 设置当前活动路由
+  routePathIndex && tabBarStore.setActiveNavIndex(routePathIndex)
+})
+
 </script>
