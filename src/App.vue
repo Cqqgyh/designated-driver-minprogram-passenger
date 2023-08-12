@@ -5,6 +5,8 @@
 uni.hideTabBar()
 </script>
 <style>
+/* 加载阿里图标字体 */
+@import './static/font/index.css';
 /* #ifdef APP-PLUS-NVUE */
 @import './tmui/scss/nvue.css';
 /* #endif */

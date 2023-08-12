@@ -30,7 +30,16 @@ export const useTheme = () => {
     if (!color) return
     toggleThemeColor(color)
   }
+  const getThemeColor = () => {
+    return (
+      tmPiniaStore.tmStore.colorList.find((item) => item.name === tmPiniaStore.tmStore.color)?.value ||
+      tmPiniaStore.tmStore.colorList.find((item) => item.name === 'primary')?.value ||
+      ''
+    )
+  }
   return {
+    tmPiniaStore,
+    getThemeColor,
     toggleDarkOrLight,
     toggleThemeColor,
     toggleThemeColorByColorThemeName
