@@ -10,9 +10,9 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "首页",
-//        "navigationStyle": "custom",
-//        "titlePenetrate": "YES"
+        "navigationBarTitleText": "首页"
+        //        "navigationStyle": "custom",
+        //        "titlePenetrate": "YES"
       }
     },
     {
@@ -24,8 +24,8 @@
     {
       "path": "pages/userCenter/userCenter",
       "style": {
-        "navigationBarTitleText": "个人中心",
-//        "navigationBarBackgroundColor": "#E7F0FF"
+        "navigationBarTitleText": "个人中心"
+        //        "navigationBarBackgroundColor": "#E7F0FF"
       }
     }
   ],
@@ -62,8 +62,8 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-//        "iconPath": "static/image/icon_component.png",
-//        "selectedIconPath": "static/image/icon_component_HL.png",
+        //        "iconPath": "static/image/icon_component.png",
+        //        "selectedIconPath": "static/image/icon_component_HL.png",
         "text": ""
       },
       {
@@ -86,9 +86,17 @@
     "current": 0,
     "list": [
       {
-        "name": "",
-        "path": "",
+        "name": "测试页-首页",
+        "path": "pages/index/index"
+      },
+      {
+        "name": "测试页-优惠券",
+        "path": "pages/coupon/coupon",
         "query": ""
+      },
+      {
+        "name": "测试页-个人中心",
+        "path": "pages/userCenter/userCenter"
       }
     ]
   }
