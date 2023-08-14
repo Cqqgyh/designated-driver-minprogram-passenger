@@ -55,6 +55,12 @@ export const useTimeIncrease = (param?: ITimeIncrease) => {
     minutes.value = 0
     seconds.value = 0
   }
+  // 终止定时器，且重置时间
+  const stopAndReset = () => {
+    clearInterval(timer.value)
+    reset()
+  }
+
   onUnmounted(() => {
     clearInterval(timer.value)
     reset()
@@ -65,6 +71,7 @@ export const useTimeIncrease = (param?: ITimeIncrease) => {
     timeDateTypeInfo,
     start,
     stop,
-    reset
+    reset,
+    stopAndReset
   }
 }
