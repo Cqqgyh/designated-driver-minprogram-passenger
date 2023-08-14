@@ -4,6 +4,7 @@
     <!--    </cover-view>-->
 
     <view>userCenter</view>
+    <loading-button @click="demo" :margin="[10]" :shadow="0" size="large" label="按钮2"></loading-button>
     <tm-button @click="demo" :margin="[10]" :shadow="0" size="large" label="按钮1"></tm-button>
     <tm-icon :font-size="50" color="red" name="tmicon-playcircle-fill"></tm-icon>
     <theme-icon custom-prefix="iconfont" type="iconfontzan" size="50"></theme-icon>

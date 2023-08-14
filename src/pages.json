@@ -27,6 +27,13 @@
         "navigationBarTitleText": "个人中心"
         //        "navigationBarBackgroundColor": "#E7F0FF"
       }
+    },
+    {
+      "path": "pages/creatOrder/creatOrder",
+      "style": {
+        "navigationBarTitleText": "确认下单"
+        //        "navigationBarBackgroundColor": "#E7F0FF"
+      }
     }
   ],
   //	分包配置
@@ -97,6 +104,10 @@
       {
         "name": "测试页-个人中心",
         "path": "pages/userCenter/userCenter"
+      },
+      {
+        "name": "测试页-确认订单",
+        "path": "pages/creatOrder/creatOrder"
       }
     ]
   }
