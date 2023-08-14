@@ -10,9 +10,9 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "首页"
-        //        "navigationStyle": "custom",
-        //        "titlePenetrate": "YES"
+        "navigationBarTitleText": "首页",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES"
       }
     },
     {
