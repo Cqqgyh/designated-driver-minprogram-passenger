@@ -57,12 +57,12 @@
       <view class="pop-content">
         <view class="text-weight-b text-size-g">请耐心等待司机接单</view>
         <view class="text-grey text-weight-b text-size-n my-5">5分钟内暂无司机接单将自动取消订单</view>
-        <view>
+        <view class="my-10 text-size-g">
           {{
             `${timeIncrease.timeDateTypeInfo.value.hours}:${timeIncrease.timeDateTypeInfo.value.minutes}:${timeIncrease.timeDateTypeInfo.value.seconds}`
           }}
         </view>
-        <loading-button :block="true" :click-fun="cancelOrderHandle" :margin="[10]" :shadow="0" size="large" label="取消订单"></loading-button>
+        <loading-button :width="500" :click-fun="cancelGetOrderHandle" :margin="[10]" :shadow="0" size="large" label="取消接单"></loading-button>
       </view>
     </tm-drawer>
   </tm-app>
@@ -98,10 +98,10 @@ function callTaxiHandle() {
   timeIncrease.start()
 }
 // 取消订单
-function cancelOrderHandle() {
+function cancelGetOrderHandle() {
   console.log('取消订单cancelOrderHandle')
   closePopupHandle()
-  timeIncrease.reset()
+  timeIncrease.stopAndReset()
 }
 //#endregion
 
