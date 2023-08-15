@@ -16,3 +16,12 @@ export function getCurrentPageInfo(): { route: string; pageInfo: any; fullPath: 
   }, 0)
   return returnObj
 }
+// 获取屏幕可用高度
+/**
+ * @description: 获取屏幕可用高度
+ * @return {number} 屏幕可用高度
+ */
+export function getScreenHeight(): number {
+  // 乘以2是因为uniapp中的rpx单位是px的一半
+  return uni.getSystemInfoSync().windowHeight * 2
+}
