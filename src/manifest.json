@@ -123,11 +123,14 @@
     "permission": {
       "scope.userLocation": {
         "desc": "你的位置信息将用于小程序定位"
+      },
+      "scope.userFuzzyLocation": {
+        "desc": "你的位置信息将用于小程序定位"
       }
     },
     //        位置信息接口
     "requiredPrivateInfos": [
-      "getFuzzylocation",
+      "getFuzzyLocation",
       "getLocation",
       "onLocationChange",
       "chooseAddress",
