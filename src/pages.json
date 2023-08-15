@@ -41,6 +41,13 @@
         "navigationBarTitleText": "订单列表"
         //        "navigationBarBackgroundColor": "#E7F0FF"
       }
+    },
+    {
+      "path": "pages/orderDetail/orderDetail",
+      "style": {
+        "navigationBarTitleText": "订单详情"
+        //        "navigationBarBackgroundColor": "#E7F0FF"
+      }
     }
   ],
   //	分包配置
@@ -119,6 +126,10 @@
       {
         "name": "测试页-订单列表",
         "path": "pages/orderList/orderList"
+      },
+      {
+        "name": "测试页-订单详情",
+        "path": "pages/orderDetail/orderDetail"
       }
     ]
   }
