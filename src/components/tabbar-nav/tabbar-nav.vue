@@ -1,5 +1,5 @@
 <template>
-  <tm-tabbar v-bind="$attrs" style="width: 100rpx !important" :autoSelect="false" v-model:active="tabBarStore.activeNavIndex">
+  <tm-tabbar v-bind="$attrs" :autoSelect="false" v-model:active="tabBarStore.activeNavIndex">
     <tm-tabbar-item
       v-for="item in tabBarStore.tabBarNavList"
       :key="item.index"
