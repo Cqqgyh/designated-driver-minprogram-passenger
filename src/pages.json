@@ -34,6 +34,13 @@
         "navigationBarTitleText": "确认下单"
         //        "navigationBarBackgroundColor": "#E7F0FF"
       }
+    },
+    {
+      "path": "pages/orderList/orderList",
+      "style": {
+        "navigationBarTitleText": "订单列表"
+        //        "navigationBarBackgroundColor": "#E7F0FF"
+      }
     }
   ],
   //	分包配置
@@ -108,6 +115,10 @@
       {
         "name": "测试页-确认订单",
         "path": "pages/creatOrder/creatOrder"
+      },
+      {
+        "name": "测试页-订单列表",
+        "path": "pages/orderList/orderList"
       }
     ]
   }
