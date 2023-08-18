@@ -1,5 +1,6 @@
 <template>
   <tm-app>
+    <!--    出发地到目的地地图-->
     <map
       v-show="!showDriversPickUpPassengersRoutePlan"
       id="map"
@@ -18,6 +19,7 @@
         <theme-icon custom-prefix="iconfont" type="iconfontditudingwei" size="30"></theme-icon>
       </cover-view>
     </map>
+    <!--    司机到乘客路线地图-->
     <map
       v-show="showDriversPickUpPassengersRoutePlan"
       id="driveMap"
@@ -36,7 +38,7 @@
         <theme-icon custom-prefix="iconfont" type="iconfontditudingwei" size="30"></theme-icon>
       </cover-view>
     </map>
-    <view class="location-panel">
+    <view v-if="!isHaveReceiveOrders" class="location-panel">
       <tm-sheet :round="3" :shadow="2">
         <view class="route-info">
           <view class="label">预估距离:</view>
@@ -51,6 +53,25 @@
           <view class="price">{{ takeCarInfo?.RouteInfo.cost }}元</view>
         </view>
         <loading-button :block="true" :click-fun="callTaxiHandle" :margin="[10]" :shadow="0" size="large" label="呼叫代驾"></loading-button>
+      </tm-sheet>
+    </view>
+    <view v-if="isHaveReceiveOrders" class="location-panel">
+      <tm-sheet :round="3" :shadow="2">
+        <view class="flex flex-row flex-row-center-start relative pl-10">
+          <tm-avatar
+            :size="150"
+            :round="26"
+            img="https://p26-passport.byteacctimg.com/img/user-avatar/39dc370feeaaddfc5dfda471b23de255~50x50.awebp"
+          ></tm-avatar>
+          <view class="flex flex-col ml-25">
+            <view class="text-size-lg text-weight-b">张师傅</view>
+            <view class="text-size-g text-gray">驾龄9年</view>
+          </view>
+          <view class="absolute r-20" @click="callDriverPhoneHandle">
+            <uni-icons custom-prefix="iconfont" type="iconfontdianhua" size="30"></uni-icons>
+          </view>
+        </view>
+        <loading-button :block="true" :click-fun="cancelOrderHandle" :margin="[10]" :shadow="0" size="large" label="取消订单"></loading-button>
       </tm-sheet>
     </view>
     <tm-drawer :width="300" :height="700" :hideHeader="true" :overlayClick="false" ref="popRef" placement="bottom">
@@ -77,7 +98,10 @@ const map = uni.createMapContext('map')
 const driveMap = uni.createMapContext('driveMap')
 // 打车相关信息仓库
 // const takeCarInfo = useTakeCarInfoStore()
+// 展示司机接乘客路线，呼叫订单中
 const showDriversPickUpPassengersRoutePlan = ref(false)
+// 已经有司机接单
+const isHaveReceiveOrders = ref(true)
 const takeCarInfo = uni.getStorageSync('routeInfo')
 const driversPickUpPassengersRoutePlan = uni.getStorageSync('driversPickUpPassengersRoutePlan')
 
@@ -102,6 +126,7 @@ function cancelGetOrderHandle() {
   console.log('取消订单cancelOrderHandle')
   closePopupHandle()
   timeIncrease.stopAndReset()
+  showDriversPickUpPassengersRoutePlan.value = false
 }
 //#endregion
 
@@ -116,6 +141,21 @@ function openPopupHandle() {
 function closePopupHandle() {
   popRef.value?.close()
   console.log('关闭弹出层closePopupHandle')
+}
+//#endregion
+
+//#region <司机订单后逻辑>
+// 取消订单
+function cancelOrderHandle() {
+  isHaveReceiveOrders.value = false
+  console.log('取消订单cancelOrderHandle')
+}
+// 打电话
+function callDriverPhoneHandle() {
+  uni.makePhoneCall({
+    phoneNumber: '114' //仅为示例
+  })
+  console.log('打电话callDriverPhoneHandle')
 }
 //#endregion
 
