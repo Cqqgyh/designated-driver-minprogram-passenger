@@ -93,7 +93,7 @@ import { ref } from 'vue'
 import { useTakeCarInfoStore } from '@/store/modules/takeCarInfo'
 import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
 import { useTimeIncrease } from '@/hooks/useTimeIncrease'
-
+import { driversPickUpPassengersRoutePlanObj, routeInfoObj } from '@/mock/mock'
 const map = uni.createMapContext('map')
 const driveMap = uni.createMapContext('driveMap')
 // 打车相关信息仓库
@@ -102,8 +102,8 @@ const driveMap = uni.createMapContext('driveMap')
 const showDriversPickUpPassengersRoutePlan = ref(false)
 // 已经有司机接单
 const isHaveReceiveOrders = ref(true)
-const takeCarInfo = uni.getStorageSync('routeInfo')
-const driversPickUpPassengersRoutePlan = uni.getStorageSync('driversPickUpPassengersRoutePlan')
+const takeCarInfo = routeInfoObj
+const driversPickUpPassengersRoutePlan = driversPickUpPassengersRoutePlanObj
 
 // 回到当前位置
 function moveCurrentHandle() {
