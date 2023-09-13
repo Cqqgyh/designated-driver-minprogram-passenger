@@ -33,7 +33,6 @@ import { useQqMapSdk } from '@/hooks/useQqMapSdk'
 import { IMapProps } from '@/api/index/types'
 import { useTakeCarInfoStore } from '@/store/modules/takeCarInfo'
 import { QqMapkey } from '@/config/config'
-const { qqmapsdk } = useQqMapSdk()
 //#region <map相关>
 const map = uni.createMapContext('map')
 // 选择地点插件
@@ -72,6 +71,7 @@ function setFromOrToLocation(type: 'from' | 'to') {
 // 样式
 //#endregion
 onShow(() => {
+  console.log('onShow-chooseLocation', chooseLocation)
   const location = chooseLocation.getLocation() // 如果点击确认选点按钮，则返回选点结果对象，否则返回null
   console.log('location', location)
   // 如果没有选择地点，重置takeCarInfo中所有信息
