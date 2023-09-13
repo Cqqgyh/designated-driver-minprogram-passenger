@@ -24,10 +24,10 @@
       v-show="showDriversPickUpPassengersRoutePlan"
       id="driveMap"
       class="map"
-      :longitude="driversPickUpPassengersRoutePlan.from.longitude"
-      :latitude="driversPickUpPassengersRoutePlan.from.latitude"
-      :polyline="driversPickUpPassengersRoutePlan.RouteInfo.polyline"
-      :markers="driversPickUpPassengersRoutePlan.RouteInfo.markers"
+      :longitude="takeCarInfo.carInfo.from.longitude"
+      :latitude="takeCarInfo.carInfo.from.latitude"
+      :polyline="takeCarInfo.carInfo.RouteInfo.polyline"
+      :markers="takeCarInfo.carInfo.RouteInfo.markers"
       scale="12"
       :enable-traffic="false"
       :show-location="true"
@@ -50,7 +50,7 @@
         </view>
         <view class="route-info">
           <view class="label">预估价格:</view>
-          <view class="price">{{ takeCarInfo?.RouteInfo.cost }}元</view>
+          <view class="price">{{ takeCarInfo?.RouteInfo.totalAmount }}元</view>
         </view>
         <loading-button :block="true" :click-fun="callTaxiHandle" :margin="[10]" :shadow="0" size="large" label="呼叫代驾"></loading-button>
       </tm-sheet>
@@ -58,14 +58,10 @@
     <view v-if="isHaveReceiveOrders" class="location-panel">
       <tm-sheet :round="3" :shadow="2">
         <view class="flex flex-row flex-row-center-start relative pl-10">
-          <tm-avatar
-            :size="150"
-            :round="26"
-            img="https://p26-passport.byteacctimg.com/img/user-avatar/39dc370feeaaddfc5dfda471b23de255~50x50.awebp"
-          ></tm-avatar>
+          <tm-avatar :size="150" :round="26" :img="takeCarInfo.carInfo.driverInfo.avatarUrl"></tm-avatar>
           <view class="flex flex-col ml-25">
-            <view class="text-size-lg text-weight-b">张师傅</view>
-            <view class="text-size-g text-gray">驾龄9年</view>
+            <view class="text-size-lg text-weight-b">{{ takeCarInfo.carInfo.driverInfo.name }}</view>
+            <view class="text-size-g text-gray">驾龄{{ takeCarInfo.carInfo.driverInfo.driverLicenseAge }}年</view>
           </view>
           <view class="absolute r-20" @click="callDriverPhoneHandle">
             <uni-icons custom-prefix="iconfont" type="iconfontdianhua" size="30"></uni-icons>
@@ -77,7 +73,7 @@
     <tm-drawer :width="300" :height="700" :hideHeader="true" :overlayClick="false" ref="popRef" placement="bottom">
       <view class="pop-content">
         <view class="text-weight-b text-size-g">请耐心等待司机接单</view>
-        <view class="text-grey text-weight-b text-size-n my-5">5分钟内暂无司机接单将自动取消订单</view>
+        <view class="text-grey text-weight-b text-size-n my-5">15分钟内暂无司机接单将自动取消订单</view>
         <view class="my-10 text-size-g">
           {{
             `${timeIncrease.timeDateTypeInfo.value.hours}:${timeIncrease.timeDateTypeInfo.value.minutes}:${timeIncrease.timeDateTypeInfo.value.seconds}`
@@ -93,33 +89,55 @@ import { ref } from 'vue'
 import { useTakeCarInfoStore } from '@/store/modules/takeCarInfo'
 import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
 import { useTimeIncrease } from '@/hooks/useTimeIncrease'
-import { driversPickUpPassengersRoutePlanObj, routeInfoObj } from '@/mock/mock'
+
 const map = uni.createMapContext('map')
 const driveMap = uni.createMapContext('driveMap')
 // 打车相关信息仓库
-// const takeCarInfo = useTakeCarInfoStore()
+const takeCarInfo = useTakeCarInfoStore()
+// const takeCarInfo = routeInfoObj
 // 展示司机接乘客路线，呼叫订单中
 const showDriversPickUpPassengersRoutePlan = ref(false)
 // 已经有司机接单
-const isHaveReceiveOrders = ref(true)
-const takeCarInfo = routeInfoObj
-const driversPickUpPassengersRoutePlan = driversPickUpPassengersRoutePlanObj
+const isHaveReceiveOrders = ref(false)
 
 // 回到当前位置
 function moveCurrentHandle() {
   map.moveToLocation(takeCarInfo.from)
-  driveMap.moveToLocation(driversPickUpPassengersRoutePlan.from)
+  driveMap.moveToLocation(takeCarInfo.carInfo.from)
 }
 
 //#region <等待订单>
+// 存放轮询定时器
+const timer = ref<NodeJS.Timeout | null>(null)
 // 时间增长
 const timeIncrease = useTimeIncrease()
 // 呼叫代驾
-function callTaxiHandle() {
+async function callTaxiHandle() {
   console.log('呼叫代驾callTaxiHandle')
-  showDriversPickUpPassengersRoutePlan.value = true
+  // showDriversPickUpPassengersRoutePlan.value = false
   openPopupHandle()
   timeIncrease.start()
+  //   提交订单
+  await takeCarInfo.submitOrderHandle()
+  //   开启轮询查询订单状态
+  await takeCarInfo.queryOrderStatus({
+    // 接单成功
+    ACCEPTED: async () => {
+      showDriversPickUpPassengersRoutePlan.value = true
+      isHaveReceiveOrders.value = true
+      closePopupHandle()
+      //   停止轮询订单状态
+      takeCarInfo.stopQueryOrderStatus()
+      //   请求司机信息
+      await takeCarInfo.getDriverInfoHandle()
+      //   司机实时位置
+      await takeCarInfo.queryCarLocation(() => {
+        console.log('getCarLocationHandle:', takeCarInfo.carInfo.RouteInfo.markers)
+        console.log('point:', takeCarInfo.point)
+      })
+      //   更新地图位置
+    }
+  })
 }
 // 取消订单
 function cancelGetOrderHandle() {
@@ -127,6 +145,8 @@ function cancelGetOrderHandle() {
   closePopupHandle()
   timeIncrease.stopAndReset()
   showDriversPickUpPassengersRoutePlan.value = false
+  //   停止轮询订单状态
+  takeCarInfo.stopQueryOrderStatus()
 }
 //#endregion
 
@@ -148,6 +168,8 @@ function closePopupHandle() {
 // 取消订单
 function cancelOrderHandle() {
   isHaveReceiveOrders.value = false
+  // 停止查询司机位置
+  takeCarInfo.stopQueryCarLocation()
   console.log('取消订单cancelOrderHandle')
 }
 // 打电话
@@ -161,7 +183,10 @@ function callDriverPhoneHandle() {
 
 onLoad(() => {
   //   获取当前位置信息
-  // takeCarInfo.routePlan()
+  takeCarInfo.routePlan()
+})
+onUnload(() => {
+  timeIncrease.stopAndReset()
 })
 </script>
 
