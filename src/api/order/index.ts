@@ -36,9 +36,28 @@ export function getCarLocation(orderId: number) {
   }>(`/order/getCacheOrderLocation/${orderId}`)
 }
 /**
- * @description 司机赶往代驾起始点：获取订单经纬度位置
+ * @description 代驾服务：获取订单服务最后一个位置信息
+ * @param orderId
+ */
+export function getOrderServiceLastLocation(orderId: number) {
+  return http.get<{
+    longitude: number
+    latitude: number
+  }>(`/order/getOrderServiceLastLocation/${orderId}`)
+}
+/**
+ * @description 根据订单id获取司机基本信息
  * @param orderId
  */
 export function getDriverInfo(orderId: number) {
   return http.get<IDriverInfo>(`/order/getDriverInfo/${orderId}`)
 }
+
+/**
+ * @description 乘客取消未接单订单
+ * @param orderId
+ */
+export function customerCancelNoAcceptOrder(orderId: number) {
+  return http.get(`/order/customerCancelNoAcceptOrder/${orderId}`)
+}
+
