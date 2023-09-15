@@ -89,6 +89,7 @@ import { ref } from 'vue'
 import { useTakeCarInfoStore } from '@/store/modules/takeCarInfo'
 import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
 import { useTimeIncrease } from '@/hooks/useTimeIncrease'
+import { customerCancelNoAcceptOrder } from '@/api/order'
 
 const map = uni.createMapContext('map')
 const driveMap = uni.createMapContext('driveMap')
@@ -121,21 +122,37 @@ async function callTaxiHandle() {
   await takeCarInfo.submitOrderHandle()
   //   开启轮询查询订单状态
   await takeCarInfo.queryOrderStatus({
+    WAITING_ACCEPT: () => {
+      console.log('等待接单')
+    },
     // 接单成功
     ACCEPTED: async () => {
       showDriversPickUpPassengersRoutePlan.value = true
       isHaveReceiveOrders.value = true
       closePopupHandle()
-      //   停止轮询订单状态
-      takeCarInfo.stopQueryOrderStatus()
       //   请求司机信息
       await takeCarInfo.getDriverInfoHandle()
       //   司机实时位置
-      await takeCarInfo.queryCarLocation(() => {
+      await takeCarInfo.queryCarLocationToStartPosition(() => {
         console.log('getCarLocationHandle:', takeCarInfo.carInfo.RouteInfo.markers)
-        console.log('point:', takeCarInfo.point)
       })
       //   更新地图位置
+    },
+    // 司机到达代驾位置
+    DRIVER_ARRIVED: () => {
+      // 切换显示地图：出发地到目的地地图
+      showDriversPickUpPassengersRoutePlan.value = false
+      // 停止司机位置轮询：司机位置->出发地
+      takeCarInfo.stopQueryCarLocationToStartPosition()
+      console.log('司机已到达')
+    },
+    // 开始服务
+    START_SERVICE: () => {
+      // 停止轮询订单状态
+      // takeCarInfo.stopQueryOrderStatus()
+      // 开启新的轮询：出发地->目的地
+      takeCarInfo.queryCarLocationToEndPosition()
+      console.log('开始服务')
     }
   })
 }
@@ -144,9 +161,12 @@ function cancelGetOrderHandle() {
   console.log('取消订单cancelOrderHandle')
   closePopupHandle()
   timeIncrease.stopAndReset()
+  // 显示出发地到目的地地图
   showDriversPickUpPassengersRoutePlan.value = false
   //   停止轮询订单状态
   takeCarInfo.stopQueryOrderStatus()
+  //   取消接单
+  customerCancelNoAcceptOrder(takeCarInfo.orderInfo.orderId)
 }
 //#endregion
 
@@ -169,7 +189,7 @@ function closePopupHandle() {
 function cancelOrderHandle() {
   isHaveReceiveOrders.value = false
   // 停止查询司机位置
-  takeCarInfo.stopQueryCarLocation()
+  takeCarInfo.stopQueryCarLocationToStartPosition()
   console.log('取消订单cancelOrderHandle')
 }
 // 打电话
