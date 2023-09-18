@@ -180,7 +180,7 @@ export const useTakeCarInfoStore = defineStore({
       this.resetRouteInfo()
     },
     // 路径规划
-    async routePlan(settings: { startImageUrl?: string } = {}) {
+    async routePlan(type: 1 | 2 = 1) {
       const { from, to } = this
       const params = {
         startPointLongitude: from.longitude,
@@ -213,7 +213,7 @@ export const useTakeCarInfoStore = defineStore({
             x: 0.5,
             y: 0.5
           },
-          iconPath: settings.startImageUrl ? settings.startImageUrl : startImgUrl
+          iconPath: type === 1 ? startImgUrl : carImgUrl
         },
         {
           id: 2,
@@ -307,7 +307,7 @@ export const useTakeCarInfoStore = defineStore({
               }
               break
             case OrderStatus.START_SERVICE:
-              console.log('OrderStatus.START_SERVICE')
+              console.log('OrderStatus.START_SERVICE', settingCallback.START_SERVICE)
               if (settingCallback.START_SERVICE) {
                 settingCallback.START_SERVICE()
                 delete settingCallback.START_SERVICE
@@ -365,6 +365,7 @@ export const useTakeCarInfoStore = defineStore({
     // 获取司机位置:type 1 设置司机位置->出发地 2 设置出发地->目的地
     async getCarLocationHandle(type: 1 | 2 = 1) {
       if (type === 1) {
+        console.log('getCarLocationHandle-type', 1)
         const res = await getCarLocation(this.orderInfo.orderId)
         const position = res.data
         this.setCarPosition({
@@ -381,6 +382,7 @@ export const useTakeCarInfoStore = defineStore({
         })
       }
       if (type === 2) {
+        console.log('getCarLocationHandle-type', 2)
         const res = await getOrderServiceLastLocation(this.orderInfo.orderId)
         const position = res.data
         this.setFromAndTo({
@@ -420,6 +422,7 @@ export const useTakeCarInfoStore = defineStore({
     },
     // 轮询查询司机位置：出发位置->目的地
     async queryCarLocationToEndPosition(callback: () => void = () => {}) {
+      console.log('queryCarLocationToEndPosition', this.timer)
       if (this.timer) return
       this.stopQueryCarLocationToStartPosition()
       this.timer = new TimerClass({
@@ -428,7 +431,7 @@ export const useTakeCarInfoStore = defineStore({
           // 获取司机位置
           await this.getCarLocationHandle(2)
           // 更新路线
-          await this.routePlan({ startImageUrl: carImgUrl })
+          await this.routePlan(2)
           callback()
         }
       })

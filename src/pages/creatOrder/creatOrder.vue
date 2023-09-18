@@ -3,6 +3,7 @@
     <!--    出发地到目的地地图-->
     <map
       v-show="!showDriversPickUpPassengersRoutePlan"
+      :key="1"
       id="map"
       class="map"
       :longitude="takeCarInfo.from.longitude"
@@ -22,6 +23,7 @@
     <!--    司机到乘客路线地图-->
     <map
       v-show="showDriversPickUpPassengersRoutePlan"
+      :key="2"
       id="driveMap"
       class="map"
       :longitude="takeCarInfo.carInfo.from.longitude"
@@ -139,9 +141,7 @@ async function callTaxiHandle() {
       //   更新地图位置
     },
     // 司机到达代驾位置
-    DRIVER_ARRIVED: () => {
-      // 切换显示地图：出发地到目的地地图
-      showDriversPickUpPassengersRoutePlan.value = false
+    DRIVER_ARRIVED: async () => {
       // 停止司机位置轮询：司机位置->出发地
       takeCarInfo.stopQueryCarLocationToStartPosition()
       console.log('司机已到达')
@@ -150,9 +150,32 @@ async function callTaxiHandle() {
     START_SERVICE: () => {
       // 停止轮询订单状态
       // takeCarInfo.stopQueryOrderStatus()
+      // 切换显示地图：出发地到目的地地图
+      showDriversPickUpPassengersRoutePlan.value = false
       // 开启新的轮询：出发地->目的地
-      takeCarInfo.queryCarLocationToEndPosition()
+      takeCarInfo.queryCarLocationToEndPosition(() => {
+        console.log('queryCarLocationToEndPosition:', takeCarInfo.RouteInfo.markers)
+      })
       console.log('开始服务')
+    },
+    // 结束服务
+    END_SERVICE: () => {
+      // 停止轮询司机位置
+      takeCarInfo.stopQueryCarLocationToEndPosition()
+      console.log('结束服务')
+    },
+    //  代付款
+    UNPAID: () => {
+      // 结束账单状态轮询
+      takeCarInfo.stopQueryOrderStatus()
+      // 跳转到订单详情页面
+      uni.redirectTo({
+        url: `/pages/orderDetail/orderDetail?orderId=${takeCarInfo.orderInfo.orderId}`
+      })
+      // 清空订单信息
+      takeCarInfo.$reset()
+      console.log('takeCarInfo', takeCarInfo)
+      console.log('代付款')
     }
   })
 }
