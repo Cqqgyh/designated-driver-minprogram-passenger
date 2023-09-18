@@ -27,8 +27,11 @@ export const OrderStatusMap = [
   { label: '司机已到达', value: OrderStatus.DRIVER_ARRIVED },
   { label: '更新代驾车辆信息', value: OrderStatus.UPDATE_CART_INFO },
   { label: '开始服务', value: OrderStatus.START_SERVICE },
+  // 结束代驾服务更新订单账单
   { label: '结束服务', value: OrderStatus.END_SERVICE },
+  // 司机发送账单信息
   { label: '待付款', value: OrderStatus.UNPAID },
+  // 乘客付款成功-》订单结束
   { label: '已付款', value: OrderStatus.PAID },
   { label: '系统取消订单', value: OrderStatus.CANCEL_ORDER }
 ]

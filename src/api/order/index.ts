@@ -1,11 +1,16 @@
 import http from '@/http'
-import { IDriverInfo, IQueryParams, IRouteInfo, ISubmitOrderParams } from "@/api/order/types"
+import { IDriverInfo, IOrderBillInfo, IQueryParams, IRouteInfo, ISubmitOrderParams } from '@/api/order/types'
 import { OrderStatus } from '@/config/constEnums'
 /**
  * @description 预估订单数据
  * @param params
  */
 export function getExpectOrder(params: IQueryParams) {
+  // 特殊处理，因为后台设计数据库位置精确到小数点后6位，所以这里也要处理一下
+  // params.startPointLongitude = Number(params.startPointLongitude.toFixed(6))
+  // params.startPointLatitude = Number(params.startPointLatitude.toFixed(6))
+  // params.endPointLongitude = Number(params.endPointLongitude.toFixed(6))
+  // params.endPointLatitude = Number(params.endPointLatitude.toFixed(6))
   return http.post<IRouteInfo>('/order/expectOrder', params)
 }
 
@@ -61,3 +66,10 @@ export function customerCancelNoAcceptOrder(orderId: number) {
   return http.get(`/order/customerCancelNoAcceptOrder/${orderId}`)
 }
 
+/**
+ * @description 获取订单账单信息
+ * @param orderId
+ */
+export function getOrderBillInfo(orderId: number) {
+  return http.get<IOrderBillInfo>(`/order/getOrderBillInfo/${orderId}`)
+}

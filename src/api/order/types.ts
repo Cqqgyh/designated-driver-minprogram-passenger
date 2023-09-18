@@ -1,4 +1,6 @@
 // 提交订单参数
+import { OrderStatus } from '@/config/constEnums'
+
 export interface ISubmitOrderParams extends IQueryParams {
   // 出发地
   startLocation: string
@@ -93,4 +95,27 @@ export interface IDriverInfo {
   driverLicenseAge: number
   orderCount: number
   score: number
+}
+export interface IOrderBillInfo {
+  totalAmount: number
+  realPayAmount: number
+  distanceFee: number
+  waitFee: number
+  tollFee: number
+  parkingFee: number
+  otherFee: number
+  longDistanceFee: number
+  favourFee: number
+  voucherFee: number
+  baseDistance: number
+  baseDistanceFee: number
+  exceedDistance: number
+  exceedDistancePrice: number
+  baseWaitMinute: number
+  exceedWaitMinute: number
+  exceedWaitMinutePrice: number
+  baseLongDistance: number
+  exceedLongDistance: number
+  exceedLongDistancePrice: number
+  orderStatus: OrderStatus
 }
