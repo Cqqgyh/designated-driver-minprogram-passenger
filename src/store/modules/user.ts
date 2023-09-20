@@ -72,15 +72,19 @@ export const useUserStore = defineStore({
     },
     // 退出登陆
     logout() {
+      this.clearAllOfUser()
+      // 回到首页
+      uni.navigateTo({
+        url: '/pages/index/index'
+      })
+    },
+    // 清空用户所有信息
+    clearAllOfUser() {
       removeToken()
       removeUser()
       // uni.clearStorageSync()  // 清空所有缓存 可能有些缓存不需要清理，先留着，以后看情况再说
       this.user = {} as UserInfoInterface
       this.token = ''
-      // 回到首页
-      uni.navigateTo({
-        url: '/pages/index/index'
-      })
     }
   },
   // 设置为true，缓存state
