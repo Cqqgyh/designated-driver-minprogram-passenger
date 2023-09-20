@@ -1,5 +1,6 @@
 import Request, { HttpRequestConfig } from 'luch-request'
 import { ResultData, ResultEnum } from '@/http/type'
+import { getToken } from '@/utils/storage'
 
 const service = new Request()
 // 全局配置
@@ -20,7 +21,7 @@ service.interceptors.request.use(
     }
     // 演示custom 用处
     // if (config.custom.auth) {
-    config.header.token = 'a7e5a948b8794ca7936e6cc5203e0dec'
+    config.header.token = getToken()
     // }
     // if (config.custom.loading) {
     //  uni.showLoading()

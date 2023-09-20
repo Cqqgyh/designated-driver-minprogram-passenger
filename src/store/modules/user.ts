@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getRedirectUrl, removeRedirectUrl, removeToken, removeUser, setUser } from '@/utils/storage'
+import { getRedirectUrl, removeRedirectUrl, removeToken, removeUser, setToken, setUser } from '@/utils/storage'
 import { getLogin, getUserInfo, updateUserInfo } from '@/api/user'
 import { TOKEN_KEY } from '@/config/constant'
 import { UpdateUserInfoInterface, UserInfoInterface } from '@/api/user/types'
@@ -9,7 +9,7 @@ export const useUserStore = defineStore({
   id: 'app-user',
   state: () => ({
     token: '',
-    user: { token: '123' } as any
+    user: {} as any
   }),
   actions: {
     // 微信登陆
@@ -22,11 +22,11 @@ export const useUserStore = defineStore({
           await this.getUserInfo()
           const redirectUrl = getRedirectUrl()
           console.log('redirectUrl', redirectUrl)
-          uni.redirectTo({
-            url: redirectUrl ? redirectUrl : '/pages/index/index'
-          })
-          // 清空重定向url
-          removeRedirectUrl()
+          // uni.redirectTo({
+          //   url: redirectUrl ? redirectUrl : '/pages/index/index'
+          // })
+          // // 清空重定向url
+          // removeRedirectUrl()
         },
         fail: (err: any) => {
           console.log(err)
@@ -37,10 +37,11 @@ export const useUserStore = defineStore({
     async getToken(code: string) {
       try {
         const res = await getLogin(code)
-        if (res.data.token) {
+        if (res.data) {
           // 本地保存token
-          uni.setStorageSync(TOKEN_KEY, res.data.token)
-          this.token = res.data.token
+          setToken(res.data)
+          // uni.setStorageSync(TOKEN_KEY, res.data.token)
+          this.token = res.data
         }
       } catch (error) {
         console.log(error)
@@ -68,7 +69,7 @@ export const useUserStore = defineStore({
           })
         } else {
           this.user = res.data
-          setUser(JSON.stringify(res.data))
+          setUser(res.data)
         }
       } catch (error) {
         console.log(error)

@@ -35,3 +35,24 @@ export const OrderStatusMap = [
   { label: '已付款', value: OrderStatus.PAID },
   { label: '系统取消订单', value: OrderStatus.CANCEL_ORDER }
 ]
+// 性别
+export enum Gender {
+  MALE = 1,
+  FEMALE = 2,
+  SECRET = 3
+}
+// 性别
+export const GenderMap = [
+  {
+    label: '男',
+    value: Gender.MALE
+  },
+  {
+    label: '女',
+    value: Gender.FEMALE
+  },
+  {
+    label: '保密',
+    value: Gender.SECRET
+  }
+]

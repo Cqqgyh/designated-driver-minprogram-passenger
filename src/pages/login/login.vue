@@ -5,19 +5,14 @@
       <image src="@/static/images/logo.png"></image>
     </view>
     <view class="btn flex flex-col flex-center">
-      <loading-button
-        type="success"
-        :click-fun="() => {}"
-        open-type="getPhoneNumber"
-        :bindgetphonenumber="getPhoneNumber"
-        :shadow="0"
-        size="large"
-        label="微信登陆"
-      ></loading-button>
+      <loading-button type="success" :click-fun="userStore.loginWithWechat" :shadow="0" size="large" label="微信登陆"></loading-button>
     </view>
   </tm-app>
 </template>
 <script setup lang="ts">
+import { useUserStore } from '@/store/modules/user'
+
+const userStore = useUserStore()
 // 微信登陆
 // function loginWithWechat() {
 //   uni.login({
@@ -31,9 +26,6 @@
 //   })
 // }
 // loginWithWechat()
-function getPhoneNumber(e) {
-  console.log(e)
-}
 </script>
 
 <style scoped lang="scss">

@@ -1,20 +1,17 @@
 // 从后台获取用户信息接口
+import { Gender } from '@/config/constEnums'
+
 export interface UserInfoInterface {
-  id: number
+  isBindPhone: boolean
   wxOpenId: string
   nickname: string
+  gender: Gender
   avatarUrl: string
-  isVip: number
-  vipExpireTime: string
-}
-// 后台微信登陆接口
-export interface LoginResponseInterface {
-  token: string
-  refreshToken?: string
 }
 // 更新用户信息接口
 export interface UpdateUserInfoInterface {
   avatarUrl?: string
+  ender?: Gender
   nickname?: string
 }
 // 微信登陆返回信息接口
