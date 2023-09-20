@@ -9,7 +9,7 @@ export const useUserStore = defineStore({
   id: 'app-user',
   state: () => ({
     token: '',
-    user: {} as any
+    user: {} as UserInfoInterface
   }),
   actions: {
     // 微信登陆
@@ -20,11 +20,10 @@ export const useUserStore = defineStore({
           await this.getToken(loginRes.code)
           // 登录成功，获取用户信息
           await this.getUserInfo()
-          const redirectUrl = getRedirectUrl()
-          console.log('redirectUrl', redirectUrl)
-          // uni.redirectTo({
-          //   url: redirectUrl ? redirectUrl : '/pages/index/index'
-          // })
+          // const redirectUrl = getRedirectUrl()
+          uni.switchTab({
+            url: '/pages/index/index'
+          })
           // // 清空重定向url
           // removeRedirectUrl()
         },
@@ -35,53 +34,41 @@ export const useUserStore = defineStore({
     },
     // 获取token
     async getToken(code: string) {
-      try {
-        const res = await getLogin(code)
-        if (res.data) {
-          // 本地保存token
-          setToken(res.data)
-          // uni.setStorageSync(TOKEN_KEY, res.data.token)
-          this.token = res.data
-        }
-      } catch (error) {
-        console.log(error)
+      const res = await getLogin(code)
+      if (res.data) {
+        // 本地保存token
+        setToken(res.data)
+        // uni.setStorageSync(TOKEN_KEY, res.data.token)
+        this.token = res.data
       }
     },
     // 获取用户信息
     async getUserInfo() {
-      try {
-        const res = await getUserInfo()
-        // 如果用户信息不存在的,从微信获取用户信息
-        if (!res.data.nickname || !res.data.avatarUrl) {
-          uni.getUserInfo({
-            provider: 'weixin',
-            success: async (infoRes: GetUserInfoRes) => {
-              const params = {
-                avatarUrl: infoRes.userInfo.avatarUrl,
-                nickname: infoRes.userInfo.nickName
-              }
-              // 在这里可以将用户信息传递给后端进行登录验证等操作
-              // 更新用户信息
-              await this.updateUserInfo(params)
-              // 重新请求当前用户信息
-              await this.getUserInfo()
+      const res = await getUserInfo()
+      // 如果用户信息不存在的,从微信获取用户信息
+      if (!res.data.nickname || !res.data.avatarUrl) {
+        uni.getUserInfo({
+          provider: 'weixin',
+          success: async (infoRes: GetUserInfoRes) => {
+            const params = {
+              avatarUrl: infoRes.userInfo.avatarUrl,
+              nickname: infoRes.userInfo.nickName
             }
-          })
-        } else {
-          this.user = res.data
-          setUser(res.data)
-        }
-      } catch (error) {
-        console.log(error)
+            // 在这里可以将用户信息传递给后端进行登录验证等操作
+            // 更新用户信息
+            await this.updateUserInfo(params)
+            // 重新请求当前用户信息
+            await this.getUserInfo()
+          }
+        })
+      } else {
+        this.user = res.data
+        setUser(res.data)
       }
     },
     // 更新用户信息
     async updateUserInfo(userInfo: UpdateUserInfoInterface) {
-      try {
-        const res = await updateUserInfo(userInfo)
-      } catch (error) {
-        console.log(error)
-      }
+      const res = await updateUserInfo(userInfo)
     },
     // 退出登陆
     logout() {
