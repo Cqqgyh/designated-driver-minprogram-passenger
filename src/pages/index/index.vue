@@ -71,6 +71,8 @@ function setFromOrToLocation(type: 'from' | 'to') {
 // 样式
 //#endregion
 onShow(() => {
+  // 隐藏tabbar
+  uni.hideTabBar()
   console.log('onShow-chooseLocation', chooseLocation)
   const location = chooseLocation.getLocation() // 如果点击确认选点按钮，则返回选点结果对象，否则返回null
   console.log('location', location)

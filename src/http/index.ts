@@ -79,7 +79,7 @@ service.interceptors.response.use(
     const status = response?.statusCode
     // 处理 HTTP 网络错误
     let message = ''
-    console.log(response)
+    console.log('response', response)
     switch (status) {
       case 401:
         message = 'token 失效，请重新登录'

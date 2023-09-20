@@ -49,6 +49,10 @@ function demo() {
   useTheme().toggleThemeColor('#be2edd')
   // useTheme().toggleThemeColor('red')
 }
+onShow(() => {
+  // 隐藏tabbar
+  uni.hideTabBar()
+})
 </script>
 
 <style scoped>

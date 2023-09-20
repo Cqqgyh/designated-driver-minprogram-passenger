@@ -65,6 +65,10 @@ function refreshBottom() {
   console.log('上拉加载')
 }
 //#endregion
+onShow(() => {
+  // 隐藏tabbar
+  uni.hideTabBar()
+})
 </script>
 
 <style scoped></style>
