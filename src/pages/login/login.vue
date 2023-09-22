@@ -7,25 +7,33 @@
     <view class="btn flex flex-col flex-center">
       <loading-button type="success" :click-fun="userStore.loginWithWechat" :shadow="0" size="large" label="微信登陆"></loading-button>
     </view>
+    <tm-modal v-model:show="showModal" title="提示" :overlayClick="false" @ok="modalConformHandle" @cancel="modalCancelHandle">
+      <template v-slot:button>
+        <view class="flex flex-between modal-btn">
+          <tm-button width="300" :margin="[0, 0]" :padding="[0, 0]" color="grey-1" label="取消"></tm-button>
+          <tm-button width="300" :margin="[0, 0]" :padding="[0, 0]" label="确认"></tm-button>
+        </view>
+      </template>
+      <tm-text
+        label="亲爱的用户,很高兴为您提供代驾服务。为了保障双方权益,我们需要获取您的手机号码用于进行身份验证和紧急联系。但我们会对您的隐私信息进行严格保护。希望您理解我们的考量,感谢您的信任和支持。您的隐私安全对我们来说至关重要。请放心使用我们的服务!"
+      ></tm-text>
+    </tm-modal>
   </tm-app>
 </template>
 <script setup lang="ts">
 import { useUserStore } from '@/store/modules/user'
-
 const userStore = useUserStore()
-// 微信登陆
-// function loginWithWechat() {
-//   uni.login({
-//     provider: 'weixin',
-//     success: async (loginRes: { code: string }) => {
-//       console.log(loginRes)
-//     },
-//     fail: (err: any) => {
-//       console.log(err)
-//     }
-//   })
-// }
-// loginWithWechat()
+const showModal = ref(true)
+// 打开遮罩
+function openModalHandle() {
+  showModal.value = true
+}
+function modalConformHandle(e) {
+  console.log(e)
+}
+function modalCancelHandle(e) {
+  console.log(e)
+}
 </script>
 
 <style scoped lang="scss">
@@ -39,5 +47,11 @@ const userStore = useUserStore()
 .btn {
   margin-top: 100rpx;
   width: 100%;
+}
+.modal-btn {
+  width: 100%;
+  transform: translate(0, 14rpx);
+  position: relative;
+  z-index: 999;
 }
 </style>
