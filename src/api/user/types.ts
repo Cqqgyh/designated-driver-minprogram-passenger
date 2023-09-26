@@ -30,8 +30,5 @@ export interface WechatUserInfoInterface {
 }
 // 更新微信用户手机号
 export interface WxUpdatePhoneInterface {
-  cloudID: string
   code: string
-  iv: string
-  encryptedData: string
 }

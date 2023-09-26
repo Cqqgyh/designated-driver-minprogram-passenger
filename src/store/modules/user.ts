@@ -13,17 +13,21 @@ export const useUserStore = defineStore({
   }),
   actions: {
     // 微信登陆
-    loginWithWechat() {
+    loginWithWechat(callback?: () => any) {
       uni.login({
         provider: 'weixin',
         success: async (loginRes: { code: string }) => {
           await this.getToken(loginRes.code)
           // 登录成功，获取用户信息
           await this.getUserInfo()
+          // 如果没有绑定手机号，跳转到绑定手机号页面
+          if (callback && !this.user.isBindPhone) {
+            await callback()
+          } else {
+            this.goHome()
+          }
           // const redirectUrl = getRedirectUrl()
-          uni.switchTab({
-            url: '/pages/index/index'
-          })
+
           // // 清空重定向url
           // removeRedirectUrl()
         },
@@ -85,6 +89,12 @@ export const useUserStore = defineStore({
       // uni.clearStorageSync()  // 清空所有缓存 可能有些缓存不需要清理，先留着，以后看情况再说
       this.user = {} as UserInfoInterface
       this.token = ''
+    },
+    //   去首页
+    goHome() {
+      uni.switchTab({
+        url: '/pages/index/index'
+      })
     }
   },
   // 设置为true，缓存state

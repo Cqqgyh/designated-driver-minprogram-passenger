@@ -5,7 +5,7 @@
       <image src="@/static/images/logo.png"></image>
     </view>
     <view class="btn flex flex-col flex-center">
-      <loading-button type="success" :click-fun="userStore.loginWithWechat" :shadow="0" size="large" label="微信登陆"></loading-button>
+      <loading-button type="success" :click-fun="loginHandle" :shadow="0" size="large" label="微信登陆"></loading-button>
     </view>
     <tm-modal v-model:show="showModal" title="提示" :overlayClick="false" @ok="modalConformHandle" @cancel="modalCancelHandle">
       <template v-slot:button>
@@ -36,14 +36,21 @@ const showModal = ref(false)
 function openModalHandle() {
   showModal.value = true
 }
-async function modalConformHandle(e) {
-  console.log('modalConformHandle', e)
-  console.log('e.detail', e.detail)
-  const res = await updateUserPhoneByWx({ ...e.detail })
-  console.log('res', res)
+async function modalConformHandle(e: any) {
+  const res = await updateUserPhoneByWx({ code: e.detail.code })
+  if (res.data) {
+    showModal.value = false
+    userStore.goHome()
+    await userStore.getUserInfo()
+  }
 }
 function modalCancelHandle(e) {
-  console.log('modalCancelHandle', e)
+  userStore.clearAllOfUser()
+  showModal.value = false
+}
+// 登录
+function loginHandle() {
+  userStore.loginWithWechat(openModalHandle)
 }
 </script>
 
