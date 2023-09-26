@@ -1,6 +1,7 @@
 import http from '@/http'
-import { IDriverInfo, IOrderBillInfo, IQueryParams, IRouteInfo, ISubmitOrderParams } from '@/api/order/types'
+import { IDriverInfo, IOrderBillInfo, IOrderListItem, IQueryParams, IRouteInfo, ISubmitOrderParams } from '@/api/order/types'
 import { OrderStatus } from '@/config/constEnums'
+import { PageRes, ReqPage } from '@/api/types'
 /**
  * @description 预估订单数据
  * @param params
@@ -72,4 +73,11 @@ export function customerCancelNoAcceptOrder(orderId: number) {
  */
 export function getOrderBillInfo(orderId: number) {
   return http.get<IOrderBillInfo>(`/order/getOrderBillInfo/${orderId}`)
+}
+
+/**
+ * @description 获取订单列表分页
+ */
+export function getOrderListPage(params: ReqPage) {
+  return http.get<PageRes<IOrderListItem>>(`/order/findCustomerOrderPage/${params.page}/${params.limit}`)
 }

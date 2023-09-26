@@ -119,3 +119,13 @@ export interface IOrderBillInfo {
   exceedLongDistancePrice: number
   orderStatus: OrderStatus
 }
+// 订单列表
+export interface IOrderListItem {
+  id: number
+  orderNo: string
+  startLocation: string
+  endLocation: string
+  amount: number
+  createTime: string
+  status: OrderStatus
+}
