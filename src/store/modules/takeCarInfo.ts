@@ -242,12 +242,12 @@ export const useTakeCarInfoStore = defineStore({
     // 提交订单
     async submitOrderHandle() {
       const params = {
-        startLocation: this.to.address,
-        startPointLongitude: this.to.longitude,
-        startPointLatitude: this.to.latitude,
-        endLocation: this.from.address,
-        endPointLongitude: this.from.longitude,
-        endPointLatitude: this.from.latitude
+        startLocation: this.from.address,
+        startPointLongitude: this.from.longitude,
+        startPointLatitude: this.from.latitude,
+        endLocation: this.to.address,
+        endPointLongitude: this.to.longitude,
+        endPointLatitude: this.to.latitude
       }
       const res = await submitOrder(params)
       //   设置订单id
