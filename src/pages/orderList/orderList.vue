@@ -158,9 +158,9 @@ function goToOtherPage(item: IOrderListItem) {
   } else {
     // 跳转正在进行的订单
     console.log('跳转正在进行的订单')
-    // uni.navigateTo({
-    //   url: '/pages/orderPay/orderPay?id=' + item.id
-    // })
+    uni.navigateTo({
+      url: '/pages/creatOrder/creatOrder?id=' + item.id
+    })
   }
 }
 onLoad(() => {
