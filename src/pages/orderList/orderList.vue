@@ -150,7 +150,13 @@ async function getOrderListHandle() {
 }
 //#endregion
 function goToOtherPage(item: IOrderListItem) {
-  if (item.status >= OrderStatus.UNPAID) {
+  if (item.status === OrderStatus.CANCEL_ORDER) {
+    // 跳转到订单详情
+    uni.showToast({
+      title: '该订单已取消',
+      icon: 'none'
+    })
+  } else if (item.status >= OrderStatus.UNPAID) {
     // 跳转到订单详情
     uni.navigateTo({
       url: '/pages/orderDetail/orderDetail?id=' + item.id
