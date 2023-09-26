@@ -1,5 +1,5 @@
 import http from '@/http'
-import { IDriverInfo, IOrderBillInfo, IOrderListItem, IQueryParams, IRouteInfo, ISubmitOrderParams } from '@/api/order/types'
+import { IDriverInfo, IOrderBillInfo, IOrderDetail, IOrderListItem, IQueryParams, IRouteInfo, ISubmitOrderParams } from '@/api/order/types'
 import { OrderStatus } from '@/config/constEnums'
 import { PageRes, ReqPage } from '@/api/types'
 /**
@@ -80,4 +80,12 @@ export function getOrderBillInfo(orderId: number) {
  */
 export function getOrderListPage(params: ReqPage) {
   return http.get<PageRes<IOrderListItem>>(`/order/findCustomerOrderPage/${params.page}/${params.limit}`)
+}
+
+/**
+ * @description 获取订单详情
+ * @param orderId
+ */
+export function getOrderDetail(orderId: number | string) {
+  return http.get<IOrderDetail>(`/order/getOrderInfo/${orderId}`)
 }

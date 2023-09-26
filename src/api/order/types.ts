@@ -129,3 +129,42 @@ export interface IOrderListItem {
   createTime: string
   status: OrderStatus
 }
+// 订单详情
+export interface IOrderDetail {
+  orderId: number
+  orderNo: string
+  startLocation: string
+  startPointLongitude: number
+  startPointLatitude: number
+  endLocation: string
+  endPointLongitude: number
+  endPointLatitude: number
+  status: number
+  createTime: string
+  IOrderBillVo: IOrderBillVo | null
+  driverInfoVo: IDriverInfo
+  customerInfoVo: null
+}
+export interface IOrderBillVo {
+  totalAmount: number
+  payAmount: number
+  distanceFee: number
+  waitFee: number
+  tollFee: number
+  parkingFee: number
+  otherFee: number
+  longDistanceFee: number
+  favourFee: number
+  rewardFee: number
+  couponAmount: null
+  baseDistance: number
+  baseDistanceFee: number
+  exceedDistance: number
+  exceedDistancePrice: number
+  baseWaitMinute: number
+  exceedWaitMinute: number
+  exceedWaitMinutePrice: number
+  baseLongDistance: number
+  exceedLongDistance: number
+  exceedLongDistancePrice: number
+}
