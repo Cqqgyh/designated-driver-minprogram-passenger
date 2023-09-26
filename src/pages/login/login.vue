@@ -10,8 +10,15 @@
     <tm-modal v-model:show="showModal" title="提示" :overlayClick="false" @ok="modalConformHandle" @cancel="modalCancelHandle">
       <template v-slot:button>
         <view class="flex flex-between modal-btn">
-          <tm-button width="300" :margin="[0, 0]" :padding="[0, 0]" color="grey-1" label="取消"></tm-button>
-          <tm-button width="300" :margin="[0, 0]" :padding="[0, 0]" label="确认"></tm-button>
+          <tm-button @click="modalCancelHandle" :width="300" :margin="[0, 0]" :padding="[0, 0]" color="grey-1" label="取消"></tm-button>
+          <tm-button
+            open-type="getPhoneNumber"
+            @getphonenumber="modalConformHandle"
+            :width="300"
+            :margin="[0, 0]"
+            :padding="[0, 0]"
+            label="确认"
+          ></tm-button>
         </view>
       </template>
       <tm-text
@@ -22,17 +29,21 @@
 </template>
 <script setup lang="ts">
 import { useUserStore } from '@/store/modules/user'
+import { updateUserPhoneByWx } from '@/api/user'
 const userStore = useUserStore()
-const showModal = ref(true)
+const showModal = ref(false)
 // 打开遮罩
 function openModalHandle() {
   showModal.value = true
 }
-function modalConformHandle(e) {
-  console.log(e)
+async function modalConformHandle(e) {
+  console.log('modalConformHandle', e)
+  console.log('e.detail', e.detail)
+  const res = await updateUserPhoneByWx({ ...e.detail })
+  console.log('res', res)
 }
 function modalCancelHandle(e) {
-  console.log(e)
+  console.log('modalCancelHandle', e)
 }
 </script>
 

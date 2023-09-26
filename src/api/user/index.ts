@@ -1,5 +1,5 @@
 import http from '@/http'
-import { UpdateUserInfoInterface, UserInfoInterface } from '@/api/user/types'
+import { UpdateUserInfoInterface, UserInfoInterface, WxUpdatePhoneInterface } from '@/api/user/types'
 /**
  * @description 小程序登录
  * @param  {string} code
@@ -18,4 +18,12 @@ export function getUserInfo() {
  */
 export function updateUserInfo(userInfo: UpdateUserInfoInterface) {
   return http.post('/customer/updateCustomerInfo')
+}
+
+/**
+ * @description 更新用户手机号（通过微信）
+ * @param  {WxUpdatePhoneInterface} params
+ */
+export function updateUserPhoneByWx(params: WxUpdatePhoneInterface) {
+  return http.post('/customer/updateWxPhone', params)
 }
