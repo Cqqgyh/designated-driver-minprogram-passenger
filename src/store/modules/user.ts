@@ -78,9 +78,7 @@ export const useUserStore = defineStore({
     logout() {
       this.clearAllOfUser()
       // 回到首页
-      uni.navigateTo({
-        url: '/pages/index/index'
-      })
+      this.goHome()
     },
     // 清空用户所有信息
     clearAllOfUser() {
