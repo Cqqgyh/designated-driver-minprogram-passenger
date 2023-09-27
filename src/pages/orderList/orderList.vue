@@ -159,13 +159,13 @@ function goToOtherPage(item: IOrderListItem) {
   } else if (item.status >= OrderStatus.UNPAID) {
     // 跳转到订单详情
     uni.navigateTo({
-      url: '/pages/orderDetail/orderDetail?id=' + item.id
+      url: '/pages/orderDetail/orderDetail?orderId=' + item.id
     })
   } else {
     // 跳转正在进行的订单
     console.log('跳转正在进行的订单')
     uni.navigateTo({
-      url: '/pages/creatOrder/creatOrder?id=' + item.id
+      url: '/pages/creatOrder/creatOrder?orderId=' + item.id
     })
   }
 }

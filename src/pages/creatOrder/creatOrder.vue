@@ -306,8 +306,8 @@ async function reloadPageHandleByOrderId(orderId: number | string) {
 
 onLoad((options: any) => {
   console.log('options', options)
-  if (options?.id) {
-    reloadPageHandleByOrderId(options?.id)
+  if (options?.orderId) {
+    reloadPageHandleByOrderId(options?.orderId)
   } else {
     //   获取当前位置信息
     takeCarInfo.routePlan() //   获取当前位置信息
