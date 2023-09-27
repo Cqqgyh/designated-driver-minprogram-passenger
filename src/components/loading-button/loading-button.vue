@@ -18,7 +18,7 @@ const props = defineProps({
 const loading = ref(false)
 const color = computed(() => {
   if (attrs.color) {
-    return attrs.color
+    return attrs.color as string
   }
   const typeColorList = [
     {
