@@ -141,7 +141,7 @@ export interface IOrderDetail {
   endPointLatitude: number
   status: number
   createTime: string
-  IOrderBillVo: IOrderBillVo | null
+  orderBillVo: IOrderBillVo
   driverInfoVo: IDriverInfo
   customerInfoVo: null
 }
@@ -156,7 +156,7 @@ export interface IOrderBillVo {
   longDistanceFee: number
   favourFee: number
   rewardFee: number
-  couponAmount: null
+  couponAmount: number
   baseDistance: number
   baseDistanceFee: number
   exceedDistance: number
@@ -167,4 +167,9 @@ export interface IOrderBillVo {
   baseLongDistance: number
   exceedLongDistance: number
   exceedLongDistancePrice: number
+}
+export interface ICurrentOrderOrder {
+  orderId: number
+  status: OrderStatus
+  isHasCurrentOrder: boolean
 }

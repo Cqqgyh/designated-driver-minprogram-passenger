@@ -33,6 +33,7 @@ import { useQqMapSdk } from '@/hooks/useQqMapSdk'
 import { IMapProps } from '@/api/index/types'
 import { useTakeCarInfoStore } from '@/store/modules/takeCarInfo'
 import { QqMapkey } from '@/config/config'
+import { findCustomerCurrentOrder } from '@/api/order'
 //#region <map相关>
 const map = uni.createMapContext('map')
 // 选择地点插件
@@ -70,7 +71,7 @@ function setFromOrToLocation(type: 'from' | 'to') {
 
 // 样式
 //#endregion
-onShow(() => {
+onShow(async () => {
   // 隐藏tabbar
   uni.hideTabBar()
   console.log('onShow-chooseLocation', chooseLocation)
@@ -89,9 +90,30 @@ onShow(() => {
   }
   // 如果出发地和目的地都有值，则跳转到下单页面
   if (takeCarInfo.from.address && takeCarInfo.to.address) {
-    uni.navigateTo({
-      url: '/pages/creatOrder/creatOrder'
-    })
+    // 判断已经存在订单，如果存在订单，则提示是否去往导航页
+    const { data } = await findCustomerCurrentOrder()
+    if (data.isHasCurrentOrder) {
+      uni.showModal({
+        title: '提示',
+        content: '您有未完成的订单，是否去往导航页？',
+        success: function (res) {
+          if (res.confirm) {
+            uni.navigateTo({
+              url: '/pages/creatOrder/creatOrder?id=' + data.orderId
+            })
+          } else if (res.cancel) {
+            uni.navigateTo({
+              url: '/pages/creatOrder/creatOrder'
+            })
+          }
+        }
+      })
+      return
+    } else {
+      uni.navigateTo({
+        url: '/pages/creatOrder/creatOrder'
+      })
+    }
   }
 })
 onLoad(() => {
