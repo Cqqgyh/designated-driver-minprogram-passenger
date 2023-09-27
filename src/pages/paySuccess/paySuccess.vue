@@ -12,6 +12,10 @@
 </template>
 <script setup lang="ts">
 const props = defineProps({
+  orderNo: {
+    type: String,
+    default: ''
+  },
   orderId: {
     type: String,
     default: ''
