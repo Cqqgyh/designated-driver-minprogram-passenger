@@ -1,5 +1,5 @@
 <template>
-  <tm-app>
+  <tm-app v-if="orderDetail.driverInfoVo">
     <!--    司机信息-->
     <tm-sheet>
       <view class="flex flex-row flex-row-center-start">
@@ -9,8 +9,8 @@
           img="https://p26-passport.byteacctimg.com/img/user-avatar/39dc370feeaaddfc5dfda471b23de255~50x50.awebp"
         ></tm-avatar>
         <view class="flex flex-col ml-25">
-          <view class="text-size-lg text-weight-b">张师傅</view>
-          <view class="text-size-g text-gray">驾龄9年</view>
+          <view class="text-size-lg text-weight-b">{{ orderDetail.driverInfoVo.name }}</view>
+          <view class="text-size-g text-gray">驾龄{{ orderDetail.driverInfoVo.driverLicenseAge }}年</view>
         </view>
       </view>
       <tm-divider></tm-divider>
@@ -19,7 +19,7 @@
           <template #title>
             <view class="flex flex-row flex-row-center-start">
               <view style="height: 20rpx; width: 20rpx; background-color: #93da5f; border-radius: 50%"></view>
-              <text class="ml-20">{{ '北京天安门' }}</text>
+              <text style="width: 400rpx" class="ml-20" _class="text-overflow-1">{{ orderDetail.startLocation }}</text>
             </view>
           </template>
           <template #right>
@@ -30,7 +30,7 @@
           <template #title>
             <view class="flex flex-row flex-row-center-start">
               <view style="height: 20rpx; width: 20rpx; background-color: #48b6fc; border-radius: 50%"></view>
-              <text class="ml-20">{{ '北京天安门' }}</text>
+              <text style="width: 400rpx" class="ml-20" _class="text-overflow-1">{{ orderDetail.endLocation }}</text>
             </view>
           </template>
           <template #right>
@@ -41,7 +41,7 @@
       <!--      订单创建时间-->
       <tm-cell :margin="[0, 0]" :titleFontSize="30">
         <template #title>
-          <tm-text color="grey" label="2023/08/15 16:04:00"></tm-text>
+          <tm-text color="grey" :label="orderDetail.createTime"></tm-text>
         </template>
         <template #right></template>
       </tm-cell>
@@ -57,16 +57,75 @@
         <view class="flex-1 flex-col-center-center border-l-2 border-r-2 border-t-2 border-b-2">{{ item.value }}元</view>
       </view>
     </tm-sheet>
+    <!--    支付 fixed b-0 -->
+    <view class="flex flex-row flex-row-bottom-end pay-container mb-10">
+      <loading-button color="red" :click-fun="handleReturn" :margin="[10]" :fontSize="35" :shadow="0" size="middle" label="返回"></loading-button>
+      <loading-button
+        v-if="orderDetail.status === OrderStatus.UNPAID"
+        color="red"
+        :click-fun="handlePay"
+        :margin="[10]"
+        :fontSize="35"
+        :shadow="0"
+        size="middle"
+        label="支付"
+      ></loading-button>
+    </view>
   </tm-app>
 </template>
 <script setup lang="ts">
-const descriptionsList = ref([
-  { label: '起步价（含五公里）', value: 10 },
-  { label: '收单免起步价优惠券', value: -10 },
-  { label: '里程费', value: 20 },
-  { label: '等待费', value: 10 },
-  { label: '总费用', value: 40 }
-])
+import { IOrderDetail } from '@/api/order/types'
+import { getOrderDetail } from '@/api/order'
+import { usePayStore } from '@/store/modules/pay'
+import { OrderStatus } from '@/config/constEnums'
+const payStore = usePayStore()
+const props = defineProps({
+  orderId: {
+    type: String,
+    required: true
+  }
+})
+const descriptionsList = ref<{ label: string; value: number | string }[]>([])
+const orderDetail = ref({} as IOrderDetail)
+// 获取订单详情
+const getOrderDetailHandle = async (id: number | string) => {
+  const res = await getOrderDetail(id)
+  orderDetail.value = res.data
+  descriptionsList.value = [
+    { label: '里程费', value: res.data.orderBillVo?.distanceFee || 0 },
+    { label: '等时费用', value: res.data.orderBillVo?.waitFee || 0 },
+    { label: '路桥费', value: res.data.orderBillVo?.tollFee || 0 },
+    { label: '停车费', value: res.data.orderBillVo?.parkingFee || 0 },
+    { label: '其他费用', value: res.data.orderBillVo?.otherFee || 0 },
+    { label: '远程费', value: res.data.orderBillVo?.longDistanceFee || 0 },
+    { label: '顾客好处费', value: res.data.orderBillVo?.favourFee || 0 },
+    { label: '系统奖励费', value: res.data.orderBillVo?.rewardFee || 0 },
+    { label: '优惠券金额', value: -res.data.orderBillVo?.couponAmount || 0 },
+    { label: '总费用', value: res.data.orderBillVo?.totalAmount || 0 },
+    { label: '应付费用', value: res.data.orderBillVo?.payAmount || 0 }
+  ]
+}
+// 返回
+const handleReturn = async () => {
+  await uni.navigateBack()
+}
+// 支付
+const handlePay = () => {
+  payStore.submitOrder({
+    orderId: orderDetail.value.orderId,
+    orderNo: orderDetail.value.orderNo,
+    customerCouponId: 0
+  })
+}
+
+onLoad(() => {
+  console.log('props.orderId', props?.orderId)
+  props?.orderId && getOrderDetailHandle(props?.orderId as unknown as string)
+})
 </script>
 
-<style scoped></style>
+<style scoped>
+.pay-container {
+  width: 100vw;
+}
+</style>
