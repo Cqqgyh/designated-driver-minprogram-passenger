@@ -25,8 +25,8 @@ const props = defineProps({
 const onTapReturn = (mode: number) => {
   console.log(mode)
   if (mode === 1) {
-    uni.navigateTo({
-      url: `/pages/orderDetail/orderDetail?id=${props.orderId}`
+    uni.redirectTo({
+      url: `/pages/orderDetail/orderDetail?orderId=${props.orderId}`
     })
   } else {
     uni.navigateBack()
