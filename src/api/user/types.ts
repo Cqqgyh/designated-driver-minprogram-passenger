@@ -11,7 +11,7 @@ export interface UserInfoInterface {
 // 更新用户信息接口
 export interface UpdateUserInfoInterface {
   avatarUrl?: string
-  ender?: Gender
+  gender?: Gender
   nickname?: string
 }
 // 微信登陆返回信息接口
