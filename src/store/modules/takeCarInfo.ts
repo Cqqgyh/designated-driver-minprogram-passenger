@@ -205,18 +205,6 @@ export const useTakeCarInfoStore = defineStore({
       const markers = [
         {
           id: 1,
-          latitude: from.latitude,
-          longitude: from.longitude,
-          width: 25,
-          height: 35,
-          anchor: {
-            x: 0.5,
-            y: 0.5
-          },
-          iconPath: type === 1 ? startImgUrl : carImgUrl
-        },
-        {
-          id: 2,
           latitude: to.latitude,
           longitude: to.longitude,
           width: 25,
@@ -226,6 +214,18 @@ export const useTakeCarInfoStore = defineStore({
             y: 0.5
           },
           iconPath: endImgUrl
+        },
+        {
+          id: 2,
+          latitude: from.latitude,
+          longitude: from.longitude,
+          width: 25,
+          height: 35,
+          anchor: {
+            x: 0.5,
+            y: 0.5
+          },
+          iconPath: type === 1 ? startImgUrl : carImgUrl
         }
       ]
       const totalAmount = res.data.feeRuleResponseVo.totalAmount
@@ -518,18 +518,6 @@ export const useTakeCarInfoStore = defineStore({
       const markers = [
         {
           id: 1,
-          latitude: from.latitude,
-          longitude: from.longitude,
-          width: 25,
-          height: 35,
-          anchor: {
-            x: 0.5,
-            y: 0.5
-          },
-          iconPath: driver
-        },
-        {
-          id: 2,
           latitude: to.latitude,
           longitude: to.longitude,
           width: 25,
@@ -539,6 +527,18 @@ export const useTakeCarInfoStore = defineStore({
             y: 0.5
           },
           iconPath: endImgUrl
+        },
+        {
+          id: 2,
+          latitude: from.latitude,
+          longitude: from.longitude,
+          width: 25,
+          height: 35,
+          anchor: {
+            x: 0.5,
+            y: 0.5
+          },
+          iconPath: driver
         }
       ]
       this.setCarRouteInfo({
