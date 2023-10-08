@@ -179,7 +179,7 @@ export const useTakeCarInfoStore = defineStore({
       this.resetFromAndTo()
       this.resetRouteInfo()
     },
-    // 路径规划
+    // 路径规划 type 1:出发地->目的地 startImgUrl 2:司机位置->目的地 carImgUrl
     async routePlan(type: 1 | 2 = 1) {
       const { from, to } = this
       const params = {
