@@ -63,7 +63,7 @@ export const usePayStore = defineStore('app-pay', {
       }
     },
     // 查询订单支付状态
-    async queryOrderPayStatus(orderNo: string | number, times: number = 10, interval: number = 2000, callback = () => this.paySuccess()) {
+    async queryOrderPayStatus(orderNo: string | number, times: number = 100, interval: number = 2000, callback = () => this.paySuccess()) {
       // 轮询查询订单支付状态
       try {
         console.log('轮询查询订单支付状态---start')
