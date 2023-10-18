@@ -3,11 +3,7 @@
     <!--    司机信息-->
     <tm-sheet>
       <view class="flex flex-row flex-row-center-start">
-        <tm-avatar
-          :size="170"
-          :round="26"
-          img="https://p26-passport.byteacctimg.com/img/user-avatar/39dc370feeaaddfc5dfda471b23de255~50x50.awebp"
-        ></tm-avatar>
+        <tm-avatar :size="170" :round="26" :img="orderDetail.driverInfoVo.avatarUrl"></tm-avatar>
         <view class="flex flex-col ml-25">
           <view class="text-size-lg text-weight-b">{{ orderDetail.driverInfoVo.name }}</view>
           <view class="text-size-g text-gray">驾龄{{ orderDetail.driverInfoVo.driverLicenseAge }}年</view>
