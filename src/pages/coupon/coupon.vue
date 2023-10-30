@@ -14,7 +14,7 @@
     <tm-scrolly _style="height: 85vh" v-model="refreshStatus" v-model:bottom-value="refreshBottomStatus" @refresh="refresh" @bottom="refreshBottom">
       <!--        未使用-->
       <template v-if="currentIndex === 0">
-        <view v-for="item in noUseCouponList" :key="item.couponId">
+        <view v-for="item in noUseCouponList" :key="item.id">
           <tm-coupon
             :priceDetail="{
               price: item.couponType === 1 ? item.amount : item.discount.toFixed(0), //价格金额
@@ -46,7 +46,7 @@
       </template>
       <!--        未领取-->
       <template v-if="currentIndex === 1">
-        <view v-for="item in noReceiveCouponList" :key="item.couponId">
+        <view v-for="item in noReceiveCouponList" :key="item.id">
           <tm-coupon
             :priceDetail="{
               price: item.couponType === 1 ? item.amount : item.discount * 1, //价格金额
@@ -79,7 +79,7 @@
       </template>
       <!--        已使用-->
       <template v-if="currentIndex === 2">
-        <view v-for="item in usedCouponList" :key="item.couponId">
+        <view v-for="item in usedCouponList" :key="item.id">
           <tm-coupon
             :priceDetail="{
               price: item.couponType === 1 ? item.amount : item.discount * 1, //价格金额

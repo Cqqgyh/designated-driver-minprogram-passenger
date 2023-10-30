@@ -9,7 +9,7 @@ import {
   IQueryParams,
   IRouteInfo,
   ISubmitOrderParams
-} from "@/api/order/types"
+} from '@/api/order/types'
 import { OrderStatus } from '@/config/constEnums'
 import { PageRes, ReqPage } from '@/api/types'
 /**
@@ -136,7 +136,7 @@ export function findCustomerCouponNotReceivePage(params: ReqPage) {
  * @param orderId
  */
 export function getBestCoupon(orderId: number) {
-  return http.get<ICoupon>(`/coupon/findAvailableCoupon/${orderId}`)
+  return http.get<ICoupon[]>(`/coupon/findAvailableCoupon/${orderId}`)
 }
 
 /**
