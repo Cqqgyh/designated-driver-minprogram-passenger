@@ -173,3 +173,20 @@ export interface ICurrentOrderOrder {
   status: OrderStatus
   isHasCurrentOrder: boolean
 }
+// 优惠券
+export interface ICoupon {
+  id: number
+  couponId: number
+  couponType: number
+  name: string
+  amount: number
+  discount: number
+  conditionAmount: number
+  publishCount: number
+  perLimit: number
+  expireTime: string
+  description: string
+  customerCouponId: number
+  receiveTime: string
+  reduceAmount: number
+}

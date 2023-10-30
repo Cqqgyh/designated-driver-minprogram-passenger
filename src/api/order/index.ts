@@ -1,5 +1,6 @@
 import http from '@/http'
 import {
+  ICoupon,
   ICurrentOrderOrder,
   IDriverInfo,
   IOrderBillInfo,
@@ -8,7 +9,7 @@ import {
   IQueryParams,
   IRouteInfo,
   ISubmitOrderParams
-} from '@/api/order/types'
+} from "@/api/order/types"
 import { OrderStatus } from '@/config/constEnums'
 import { PageRes, ReqPage } from '@/api/types'
 /**
@@ -104,4 +105,44 @@ export function getOrderDetail(orderId: number | string) {
  */
 export function findCustomerCurrentOrder() {
   return http.get<ICurrentOrderOrder>('/order/searchCustomerCurrentOrder')
+}
+
+/**
+ * 查询已使用优惠券分页列表
+ * @param params
+ */
+export function findCustomerCouponUsedPage(params: ReqPage) {
+  return http.get<PageRes<ICoupon>>(`/coupon/findUsedPage/${params.page}/${params.limit}`)
+}
+
+/**
+ * 查询未使用优惠券分页列表
+ * @param params
+ */
+export function findCustomerCouponExpiredPage(params: ReqPage) {
+  return http.get<PageRes<ICoupon>>(`/coupon/findNoUsePage/${params.page}/${params.limit}`)
+}
+
+/**
+ * 查询未领取优惠券分页列表
+ * @param params
+ */
+export function findCustomerCouponNotReceivePage(params: ReqPage) {
+  return http.get<PageRes<ICoupon>>(`/coupon/findNoReceivePage/${params.page}/${params.limit}`)
+}
+
+/**
+ * 获取未使用的最佳优惠券信息
+ * @param orderId
+ */
+export function getBestCoupon(orderId: number) {
+  return http.get<ICoupon>(`/coupon/findAvailableCoupon/${orderId}`)
+}
+
+/**
+ * 领取优惠券
+ * @param couponId
+ */
+export function receiveCoupon(couponId: number) {
+  return http.get(`/coupon/receive/${couponId}`)
 }
