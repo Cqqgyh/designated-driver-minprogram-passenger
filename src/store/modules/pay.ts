@@ -7,7 +7,8 @@ export const usePayStore = defineStore('app-pay', {
     return {
       orderNo: '' as string | number,
       orderId: '' as string | number,
-      customerCouponId: '' as string | number
+      customerCouponId: '' as string | number,
+      queryOrderPayStatusFlag: true
     }
   },
   actions: {
@@ -18,6 +19,7 @@ export const usePayStore = defineStore('app-pay', {
       this.customerCouponId = params?.customerCouponId || 0
       try {
         await this.wechatPay(params)
+        this.queryOrderPayStatusFlag = true
         // 查询支付状态
         await this.queryOrderPayStatus(this.orderNo)
       } catch (error) {
@@ -54,9 +56,7 @@ export const usePayStore = defineStore('app-pay', {
       console.log('wxPayParams', wxPayParams)
       try {
         console.log('微信官方支付接口---start')
-        const res = await wx.requestPayment(wxPayParams)
-        console.log('微信官方支付接口---end')
-        console.log('支付成功')
+        wx.requestPayment(wxPayParams)
       } catch (err) {
         // 支付失败
         console.log('err', err)
@@ -65,6 +65,7 @@ export const usePayStore = defineStore('app-pay', {
     // 查询订单支付状态
     async queryOrderPayStatus(orderNo: string | number, times: number = 100, interval: number = 2000, callback = () => this.paySuccess()) {
       // 轮询查询订单支付状态
+      if (!this.queryOrderPayStatusFlag) return
       try {
         console.log('轮询查询订单支付状态---start')
         const res = await queryOrderPayStatus(orderNo)
@@ -89,6 +90,10 @@ export const usePayStore = defineStore('app-pay', {
       } catch (error) {
         console.log(error)
       }
+    },
+    // 停止查询
+    async stopQueryOrderStatus() {
+      this.queryOrderPayStatusFlag = false
     },
     // 支付成功
     paySuccess() {

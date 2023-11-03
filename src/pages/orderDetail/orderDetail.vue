@@ -189,6 +189,10 @@ onLoad(() => {
   console.log('props.orderId', props?.orderId)
   props?.orderId && getOrderDetailHandle(props?.orderId as unknown as string)
 })
+onUnload(() => {
+  //   停止轮询
+  payStore.stopQueryOrderStatus()
+})
 </script>
 
 <style scoped>
