@@ -69,7 +69,15 @@
             <uni-icons custom-prefix="iconfont" type="iconfontdianhua" size="30"></uni-icons>
           </view>
         </view>
-        <loading-button :block="true" :click-fun="cancelOrderHandle" :margin="[10]" :shadow="0" size="large" label="取消订单"></loading-button>
+        <loading-button
+          :block="true"
+          disabled
+          :click-fun="cancelOrderHandle"
+          :margin="[10]"
+          :shadow="0"
+          size="large"
+          label="取消订单"
+        ></loading-button>
       </tm-sheet>
     </view>
     <tm-drawer :width="300" :height="700" :hideHeader="true" :overlayClick="false" ref="popRef" placement="bottom">
