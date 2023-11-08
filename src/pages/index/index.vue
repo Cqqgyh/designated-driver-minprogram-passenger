@@ -99,7 +99,7 @@ onShow(async () => {
         success: function (res) {
           if (res.confirm) {
             uni.navigateTo({
-              url: '/pages/creatOrder/creatOrder?id=' + data.orderId
+              url: '/pages/creatOrder/creatOrder?orderId=' + data.orderId
             })
           } else if (res.cancel) {
             // todo 方便调试生成订单 正式环境注释掉
