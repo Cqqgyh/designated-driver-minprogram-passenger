@@ -316,6 +316,8 @@ onLoad((options: any) => {
 })
 onUnload(() => {
   timeIncrease.stopAndReset()
+  //   停止轮询订单状态
+  takeCarInfo.stopQueryOrderStatus()
 })
 </script>
 
