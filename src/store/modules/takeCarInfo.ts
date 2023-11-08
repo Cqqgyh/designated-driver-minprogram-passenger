@@ -3,7 +3,15 @@ import startImgUrl from '@/static/images/start.png'
 import endImgUrl from '@/static/images/end.png'
 import carImgUrl from '@/static/images/car.png'
 import driver from '@/static/images/driver.png'
-import { getCarLocation, getDriverInfo, getExpectOrder, getOrderServiceLastLocation, getOrderStatus, submitOrder } from '@/api/order'
+import {
+  getCalculateDrivingLine,
+  getCarLocation,
+  getDriverInfo,
+  getExpectOrder,
+  getOrderServiceLastLocation,
+  getOrderStatus,
+  submitOrder
+} from '@/api/order'
 import { IDriverInfo, IMarkersItem, IOrderStatusCallback, IPolylineItem } from '@/api/order/types'
 import { TimerClass } from '@/class/timerClass'
 import { OrderStatus } from '@/config/constEnums'
@@ -502,9 +510,9 @@ export const useTakeCarInfoStore = defineStore({
         endPointLatitude: to.latitude
       }
       // 从后台获取路径规划信息
-      const res = await getExpectOrder(params)
+      const res = await getCalculateDrivingLine(params)
       console.log('res', res)
-      const route = res.data.drivingLineVo
+      const route = res.data
       const duration = route.duration
       const distance = route.distance
       const polyline = [
