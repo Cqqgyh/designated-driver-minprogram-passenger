@@ -29,13 +29,9 @@ export const usePayStore = defineStore('app-pay', {
     // 微信支付逻辑
     async wechatPay(params: IPayParams) {
       // 调用后端微信下单接口
-      try {
-        const res = await wechatPay(params)
-        // 调用微信官方支付接口，同步调用，不要加awit，因为后面微信支付逻辑后有轮询，加了await会阻碍轮询的执行
-        await this.wechatOfficialPay(res.data)
-      } catch (error) {
-        console.log(error)
-      }
+      const res = await wechatPay(params)
+      // 调用微信官方支付接口，同步调用，不要加awit，因为后面微信支付逻辑后有轮询，加了await会阻碍轮询的执行
+      await this.wechatOfficialPay(res.data)
     },
     // 微信官方支付接口
     async wechatOfficialPay(params: IWechatPayInterface) {
