@@ -197,9 +197,19 @@ export const useTakeCarInfoStore = defineStore({
         endPointLatitude: to.latitude
       }
       // 从后台获取路径规划信息
-      const res = await getExpectOrder(params)
+      let res
+      let route
+      let totalAmount
+      if (this.orderInfo.orderStatus < 1) {
+        res = await getExpectOrder(params)
+        route = res.data?.drivingLineVo
+        totalAmount = res.data.feeRuleResponseVo.totalAmount
+      } else {
+        res = await getCalculateDrivingLine(params)
+        route = res.data
+        totalAmount = this.RouteInfo.totalAmount
+      }
       console.log('res', res)
-      const route = res.data.drivingLineVo
       const duration = route.duration
       const distance = route.distance
       const polyline = [
@@ -236,7 +246,6 @@ export const useTakeCarInfoStore = defineStore({
           iconPath: type === 1 ? startImgUrl : carImgUrl
         }
       ]
-      const totalAmount = res.data.feeRuleResponseVo.totalAmount
       console.log('totalAmount', totalAmount)
       this.setRouteInfo({
         polyline,
