@@ -69,6 +69,35 @@
             <uni-icons custom-prefix="iconfont" type="iconfontdianhua" size="30"></uni-icons>
           </view>
         </view>
+        <!--       距离时间 -->
+        <view v-if="takeCarInfo?.orderInfo.orderStatus < OrderStatus.START_SERVICE">
+          <tm-cell :margin="[0, 0]" :titleFontSize="30">
+            <template #title>
+              <view class="flex flex-row flex-row-center-start">
+                <view style="height: 20rpx; width: 20rpx; background-color: #93da5f; border-radius: 50%"></view>
+                <text class="ml-20 text-overflow-3" style="width: 300rpx">距离：{{ takeCarInfo.carInfo.RouteInfo.distance }}公里</text>
+                <text class="ml-20 text-overflow-3" style="width: 300rpx">时间：{{ takeCarInfo.carInfo.RouteInfo.duration }}分钟</text>
+              </view>
+            </template>
+            <template #right>
+              <view></view>
+            </template>
+          </tm-cell>
+        </view>
+        <view v-else>
+          <tm-cell :margin="[0, 0]" :titleFontSize="30">
+            <template #title>
+              <view class="flex flex-row flex-row-center-start">
+                <view style="height: 20rpx; width: 20rpx; background-color: #93da5f; border-radius: 50%"></view>
+                <text class="ml-20 text-overflow-3" style="width: 300rpx">距离：{{ takeCarInfo.RouteInfo.distance }}公里</text>
+                <text class="ml-20 text-overflow-3" style="width: 300rpx">时间：{{ takeCarInfo.RouteInfo.duration }}分钟</text>
+              </view>
+            </template>
+            <template #right>
+              <view></view>
+            </template>
+          </tm-cell>
+        </view>
         <loading-button
           :block="true"
           disabled
@@ -290,6 +319,13 @@ async function getOrderInfoHandleByOrderId(orderId: number | string) {
   else if (res.data.status < OrderStatus.START_SERVICE) {
     showDriversPickUpPassengersRoutePlan.value = true
     isHaveReceiveOrders.value = true
+    closePopupHandle()
+    //   请求司机信息
+    await takeCarInfo.getDriverInfoHandle()
+    //   司机实时位置
+    await takeCarInfo.queryCarLocationToStartPosition(() => {
+      console.log('getCarLocationHandle:', takeCarInfo.carInfo.RouteInfo.markers)
+    })
   } else {
     showDriversPickUpPassengersRoutePlan.value = false
     isHaveReceiveOrders.value = true
@@ -312,14 +348,11 @@ async function reloadPageHandleByOrderId(orderId: number | string) {
   await getOrderInfoHandleByOrderId(orderId)
 }
 
-onLoad((options: any) => {
+onLoad(async (options: any) => {
   console.log('options', options)
   if (options?.orderId) {
-    reloadPageHandleByOrderId(options?.orderId)
-  } else {
-    //   获取当前位置信息
-    takeCarInfo.routePlan() //   获取当前位置信息
-    takeCarInfo.routePlan()
+    await reloadPageHandleByOrderId(options?.orderId)
+    await takeCarInfo.routePlan() //   获取当前位置信息
   }
 })
 onUnload(() => {
