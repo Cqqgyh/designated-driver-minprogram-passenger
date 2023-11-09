@@ -352,8 +352,8 @@ onLoad(async (options: any) => {
   console.log('options', options)
   if (options?.orderId) {
     await reloadPageHandleByOrderId(options?.orderId)
-    await takeCarInfo.routePlan() //   获取当前位置信息
   }
+  await takeCarInfo.routePlan() //   获取当前位置信息
 })
 onUnload(() => {
   timeIncrease.stopAndReset()
